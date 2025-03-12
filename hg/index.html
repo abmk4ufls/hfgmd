@@ -137,23 +137,24 @@
         }
         updateProgress();
         
-        // Fetch Steam profile data
-        function fetchSteamProfile(steamID) {
-            fetch(`https://steamcommunity.com/profiles/${steamID}/?xml=1`)
-                .then(response => response.text())
-                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-                .then(data => {
-                    let username = data.getElementsByTagName("steamID")[0].textContent;
-                    let avatar = data.getElementsByTagName("avatarFull")[0].textContent;
-                    document.getElementById('userName').textContent = username;
-                    document.getElementById('userAvatar').src = avatar;
-                })
-                .catch(error => console.error('Error fetching Steam profile:', error));
+        // Fetch Steam profile data automatically
+        function fetchSteamProfile() {
+            if (typeof window.GetAuthSessionTicket !== 'undefined') {
+                let steamID = window.GetAuthSessionTicket(); // احصل على Steam ID تلقائياً من المستخدم
+                fetch(`https://steamcommunity.com/profiles/${steamID}/?xml=1`)
+                    .then(response => response.text())
+                    .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+                    .then(data => {
+                        let username = data.getElementsByTagName("steamID")[0].textContent;
+                        let avatar = data.getElementsByTagName("avatarFull")[0].textContent;
+                        document.getElementById('userName').textContent = username;
+                        document.getElementById('userAvatar').src = avatar;
+                    })
+                    .catch(error => console.error('Error fetching Steam profile:', error));
+            }
         }
-
-        // Replace with actual Steam ID
-        let steamID = "76561197960435530"; // مثال: ضع Steam ID الحقيقي هنا
-        fetchSteamProfile(steamID);
+        
+        fetchSteamProfile();
     </script>
 </body>
 </html>
