@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: black;
+            color: white;
+            text-align: center;
+        }
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease-in-out;
+        }
+        .info-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+        }
+        .server-name {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .player-count {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        .rules {
+            margin-top: 20px;
+            font-size: 14px;
+            text-align: left;
+        }
+        .rules ul {
+            padding-left: 20px;
+        }
+        .rules li {
+            margin: 5px 0;
+        }
+        .progress-bar {
+            width: 80%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: limegreen;
+            transition: width 0.5s ease-in-out;
+        }
+        .user-box {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .user-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="background" id="bg"></div>
+    <div class="user-box">
+        <img src="avatar.jpg" alt="User Avatar" class="user-avatar" id="userAvatar">
+        <span class="user-name" id="userName">Player Name</span>
+    </div>
+    <div class="info-box">
+        <div class="server-name" id="serverName">Loading Server...</div>
+        <div class="player-count" id="playerCount">Players: 0/0</div>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <div class="rules" id="rules">
+            <strong>Server Rules:</strong>
+            <ul>
+                <li>Be respectful to others.</li>
+                <li>No cheating or exploiting bugs.</li>
+                <li>Follow server admins' instructions.</li>
+                <li>Have fun and enjoy your time!</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let backgrounds = [
+            'background1.jpg',
+            'background2.jpg',
+            'background3.jpg'
+        ];
+        let currentIndex = 0;
+        function changeBackground() {
+            document.getElementById('bg').style.backgroundImage = `url(${backgrounds[currentIndex]})`;
+            currentIndex = (currentIndex + 1) % backgrounds.length;
+        }
+        setInterval(changeBackground, 5000);
+        changeBackground();
+        
+        let progress = 0;
+        function updateProgress() {
+            progress += Math.floor(Math.random() * 10) + 5;
+            if (progress > 100) progress = 100;
+            document.getElementById('progress').style.width = progress + '%';
+            if (progress < 100) {
+                setTimeout(updateProgress, 500);
+            }
+        }
+        updateProgress();
+        
+        // Fetch Steam profile data
+        function fetchSteamProfile(steamID) {
+            fetch(`https://steamcommunity.com/profiles/${steamID}/?xml=1`)
+                .then(response => response.text())
+                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+                .then(data => {
+                    let username = data.getElementsByTagName("steamID")[0].textContent;
+                    let avatar = data.getElementsByTagName("avatarFull")[0].textContent;
+                    document.getElementById('userName').textContent = username;
+                    document.getElementById('userAvatar').src = avatar;
+                })
+                .catch(error => console.error('Error fetching Steam profile:', error));
+        }
+
+        // Replace with actual Steam ID
+        let steamID = "76561197960435530"; // مثال: ضع Steam ID الحقيقي هنا
+        fetchSteamProfile(steamID);
+    </script>
+</body>
+</html>
