@@ -109,6 +109,24 @@
             font-size: 16px;
             margin: 5px 0;
         }
+        .tips-box {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            width: 250px;
+            text-align: left;
+        }
+        .tips-image {
+            width: 100%;
+            border-radius: 5px;
+        }
+        .tips-text {
+            margin-top: 10px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -132,53 +150,9 @@
             <li>🔹 لا تقم بإزعاج الآخرين.</li>
         </ul>
     </div>
-    <script>
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
-        
-        let backgrounds = ['background1.jpg', 'background2.jpg', 'background3.jpg'];
-        let currentIndex = 0;
-        function changeBackground() {
-            document.getElementById('bg').style.backgroundImage = `url(${backgrounds[currentIndex]})`;
-            currentIndex = (currentIndex + 1) % backgrounds.length;
-        }
-        setInterval(changeBackground, 5000);
-        changeBackground();
-        
-        let progress = 0;
-        function updateProgress() {
-            progress += Math.floor(Math.random() * 10) + 5;
-            if (progress > 100) progress = 100;
-            document.getElementById('progress').style.width = progress + '%';
-            document.getElementById('progressText').textContent = progress + '%';
-            if (progress < 100) {
-                setTimeout(updateProgress, 500);
-            }
-        }
-        updateProgress();
-        
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('serverTime').textContent = now.toLocaleString();
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
-        
-        const steamID = getQueryParam('steamid');
-        if (steamID) {
-            fetch(`https://steamcommunity.com/profiles/${steamID}/?xml=1`)
-                .then(response => response.text())
-                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-                .then(data => {
-                    let username = data.getElementsByTagName("steamID")[0].textContent;
-                    let avatar = data.getElementsByTagName("avatarFull")[0].textContent;
-                    document.getElementById('userName').textContent = username;
-                    document.getElementById('userAvatar').src = avatar;
-                })
-                .catch(error => console.error('Error fetching Steam profile:', error));
-        }
-    </script>
+    <div class="tips-box" id="tipsBox">
+        <img src="tip1.jpg" class="tips-image" id="tipImage">
+        <div class="tips-text" id="tipText">نصيحة 1: قم بتنزيل جميع المحتويات المطلوبة مسبقًا لتجنب التأخير.</div>
+    </div>
 </body>
 </html>
